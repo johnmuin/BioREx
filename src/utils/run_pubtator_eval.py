@@ -9,7 +9,11 @@ import pandas as pd
 from collections import defaultdict
 import numpy as np
 import sys
-sys.path.append('src/dataset_format_converter')
+from pathlib import Path
+script_dir = Path(__file__).parent.absolute()
+
+sys.path.append(str(script_dir.parent / "dataset_format_converter"))
+# sys.path.append('src/dataset_format_converter')
 import os.path
 import re
 import distutils.util
