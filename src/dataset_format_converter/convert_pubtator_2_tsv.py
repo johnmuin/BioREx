@@ -1383,11 +1383,35 @@ if __name__ == '__main__':
         task_tag    = '[Litcoin]'
         
         src_tgt_pairs = set(
-            [('ChemicalEntity', 'ChemicalEntity'),
-             ('ChemicalEntity', 'DiseaseOrPhenotypicFeature'),
-             ('ChemicalEntity', 'GeneOrGeneProduct'),
-             ('DiseaseOrPhenotypicFeature', 'GeneOrGeneProduct'),
-             ('GeneOrGeneProduct', 'GeneOrGeneProduct')])
+            # ChemicalEntity 相关
+            [('ChemicalEntity', 'ChemicalEntity'),      # 药物相互作用
+            ('ChemicalEntity', 'DiseaseOrPhenotypicFeature'),  # 药物治疗疾病
+            ('ChemicalEntity', 'GeneOrGeneProduct'),   # 药物靶点
+            ('ChemicalEntity', 'OrganismTaxon'),       # 药物影响菌群
+            ('ChemicalEntity', 'CellLine'),            # 药物细胞毒性
+            ('ChemicalEntity', 'SequenceVariant'),     # 药物基因组学
+            
+            # DiseaseOrPhenotypicFeature 相关
+            ('DiseaseOrPhenotypicFeature', 'GeneOrGeneProduct'),   # 疾病相关基因
+            ('DiseaseOrPhenotypicFeature', 'OrganismTaxon'),       # 疾病相关菌群
+            ('DiseaseOrPhenotypicFeature', 'CellLine'),            # 疾病细胞模型
+            ('DiseaseOrPhenotypicFeature', 'SequenceVariant'),     # 疾病遗传变异
+            
+            # GeneOrGeneProduct 相关  
+            ('GeneOrGeneProduct', 'GeneOrGeneProduct'),     # 蛋白相互作用
+            ('GeneOrGeneProduct', 'OrganismTaxon'),         # 基因与菌群
+            ('GeneOrGeneProduct', 'CellLine'),              # 基因在细胞系表达
+            ('GeneOrGeneProduct', 'SequenceVariant'),       # 基因与变异
+            
+            # OrganismTaxon 相关
+            ('OrganismTaxon', 'OrganismTaxon'),             # 菌群相互作用
+            ('OrganismTaxon', 'CellLine'),                  # 细菌与细胞系
+            ('OrganismTaxon', 'SequenceVariant'),           # 菌群与宿主变异
+            
+            # 其他
+            ('CellLine', 'CellLine'),
+            ('CellLine', 'SequenceVariant'),
+            ('SequenceVariant', 'SequenceVariant')])
         
         convert_pubtator_to_tsv_file(
             in_pubtator_file = in_test_pubtator_file,
