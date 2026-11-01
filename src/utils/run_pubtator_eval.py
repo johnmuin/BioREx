@@ -280,7 +280,8 @@ def dump_pred_2_pubtator_file(in_pubtator_file,
         pmid = ''
         
         for line in pub_reader:
-            line = line.rstrip()
+            # Preserve trailing empty ID columns and source-text whitespace.
+            line = line.rstrip('\r\n')
             
             if line == '':
                 #print('len(pmid_2_rel_pairs_dict)', len(pmid_2_rel_pairs_dict))
@@ -308,7 +309,7 @@ def dump_pred_2_pubtator_file(in_pubtator_file,
                 id2index = {}
                         
             else:
-                tks = line.split('|')
+                tks = line.split('|', 2)
                 if len(tks) > 1 and (tks[1] == 't' or tks[1] == 'a'):
                     #2234245	250	270	audiovisual toxicity	Disease	D014786|D006311
                     pmid = tks[0]
@@ -338,9 +339,10 @@ def dump_pred_2_pubtator_file(in_pubtator_file,
                         
                         '''if ne_type == 'SequenceVariant':
                             ne_type = 'GeneOrGeneProduct'''
-                        id2ne_type_dict[id] = ne_type
-                        
-                        id2index[id] = index
+                        # Unnormalized mentions are retained above, but are not ID endpoints.
+                        if id.strip():
+                            id2ne_type_dict[id] = ne_type
+                            id2index[id] = index
         if pmid != '' and pmid in pmid_2_rel_pairs_dict:
             for rel in pmid_2_rel_pairs_dict[pmid]:
                 
