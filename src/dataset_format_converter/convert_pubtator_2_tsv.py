@@ -120,7 +120,11 @@ def add_annotations_2_text_instances(text_instances, annotations):
             print(annotation.position)
             print(annotation.length)
             print(annotation, 'cannot be mapped to original text')
-            raise
+            raise ValueError(
+                f'Entity {annotation.text!r} at [{annotation.position}, '
+                f'{annotation.position + annotation.length}) cannot be mapped '
+                f'to text instances: {[(t.offset, len(t.text)) for t in text_instances]}'
+            )
     
 def load_pubtator_into_documents(in_pubtator_file, 
                                  normalized_type_dict = {},
@@ -142,7 +146,7 @@ def load_pubtator_into_documents(in_pubtator_file,
         id2index = {}
         
         for line in pub_reader:
-            line = line.rstrip()
+            line = line.rstrip('\r\n')
             
             if line == '':
                 
@@ -160,7 +164,7 @@ def load_pubtator_into_documents(in_pubtator_file,
                 index2normalized_id = {}
                 continue
             
-            tks = line.split('|')
+            tks = line.split('|', 2)
             
             
             if len(tks) > 1 and (tks[1] == 't' or tks[1] == 'a'):
@@ -184,7 +188,7 @@ def load_pubtator_into_documents(in_pubtator_file,
                     _anno = AnnotationInfo(start, end-start, text, ne_type)
                     
                     #2234245	250	270	audiovisual toxicity	Disease	D014786|D006311
-                    ids = [x for x in re.split(re_id_spliter_str, _tks[5])]
+                    ids = [x for x in re.split(re_id_spliter_str, _tks[5]) if x.strip()]
                     
                     # if annotation has groupID then update its id
                     if orig_ne_type == 'SequenceVariant':
