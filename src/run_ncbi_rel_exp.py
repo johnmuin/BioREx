@@ -398,7 +398,8 @@ class BioRExProcessor(DatasetProcessor):
                 'EUADR-Association',
                 'None-EUADR',
                 'Indirect_conversion',
-                'Non_conversion']
+                'Non_conversion',
+                'None-Conversion']
             
     @classmethod
     def get_entity_type_dict(cls):

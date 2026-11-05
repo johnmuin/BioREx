@@ -188,7 +188,12 @@ def load_pubtator_into_documents(in_pubtator_file,
                     _anno = AnnotationInfo(start, end-start, text, ne_type)
                     
                     #2234245	250	270	audiovisual toxicity	Disease	D014786|D006311
-                    ids = [x for x in re.split(re_id_spliter_str, _tks[5]) if x.strip()]
+                    # A gene-qualified HGVS is one variant identity, not two IDs.
+                    if orig_ne_type == 'SequenceVariant' and re.fullmatch(
+                            r'HGVS:[^;\t]+;CorrespondingGene:[0-9]+', _tks[5]):
+                        ids = [_tks[5]]
+                    else:
+                        ids = [x for x in re.split(re_id_spliter_str, _tks[5]) if x.strip()]
                     
                     # if annotation has groupID then update its id
                     if orig_ne_type == 'SequenceVariant':

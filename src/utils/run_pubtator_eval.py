@@ -1518,7 +1518,8 @@ if __name__ == '__main__':
                 'EUADR-Association', 
                 'None-EUADR',
                 'Indirect_conversion',
-                'Non_conversion']
+                'Non_conversion',
+                'None-Conversion']
             
     if exp_option == 'biored_eval':
         # litcoin + only evaluate five different relation pairs
